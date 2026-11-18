@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+char stack[MAX];
+int top = -1;
+void push(char c) { stack[++top] = c; }
+char pop() { return (top >= 0) ? stack[top--] : '\0'; }
+int main() {
+char str[MAX];
+int i = 0, valid = 1;
+printf("PDA for L = { a^n b^n | n >= 1 }\n");
+printf("Enter input string: ");
+scanf("%s", str);
+push('Z'); /* stack bottom marker */
+/* Phase 1: push 'a' onto stack */
+while (str[i] == 'a') { push('a'); i++; }
+if (top == 0) { valid = 0; } /* no 'a' read at all */
+/* Phase 2: pop for each 'b' */
+while (str[i] == 'b') {
+
+if (top <= 0) { valid = 0; break; }
+pop();
+i++;
+}
+if (str[i] != '\0') valid = 0; /* leftover symbols (e.g. another a) */
+if (top != 0) valid = 0; /* stack must contain only Z0 */
+if (valid)
+printf("String Accepted by PDA (valid a^n b^n)\n");
+else
+printf("String Rejected by PDA\n");
+return 0;
+}
